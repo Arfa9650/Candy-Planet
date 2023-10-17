@@ -136,3 +136,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10e7ce38b50f8d743aab2bcd4e20b392, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hasSpawnedStrawberry: 0
