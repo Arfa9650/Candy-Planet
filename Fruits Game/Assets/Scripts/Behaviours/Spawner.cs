@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+
 public class Spawner : IntEventInvoker
 {
     #region Fields
@@ -11,12 +12,20 @@ public class Spawner : IntEventInvoker
 
     Vector2 position;
 
+    bool canSpawn = true;
+    bool touched = false;
+    public static bool isAttached = true;
+    public static bool collided = true;
+
     #endregion
 
     #region Methods
 
     private void Start()
     {
+        unityEvents.Add(EventNames.SpawnRandom, new RandomEvent());
+        EventManager.AddInvoker(EventNames.SpawnRandom, this); 
+        
         unityEvents.Add(EventNames.SpawnCherry, new CherryEvent());
         EventManager.AddInvoker(EventNames.SpawnCherry, this); 
 
@@ -26,36 +35,42 @@ public class Spawner : IntEventInvoker
 
     private void Update()
     {
-        if (Input.touchCount > 0)
+        if (canSpawn && !touched && collided)
+        {
+            isAttached = true;
+            unityEvents[EventNames.SpawnRandom].Invoke(transform.position);
+            canSpawn = false;
+            collided = false;
+        }
+
+        if (Input.touchCount > 0 && !canSpawn && !collided)
         {
             position.y = transform.position.y;
             position.x = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position).x;
             transform.position = position;
 
+            touched = true;
+
             for (var i = 0; i < Input.touchCount; i++)
             {
 
+                collided = false;
 
                 if (Input.GetTouch(i).phase == TouchPhase.Moved && i == 0)
                 {
                     position.x = Camera.main.ScreenToWorldPoint(Input.GetTouch(i).position).x;
-                    //position.z = 0;
                     transform.position = position;
                 }
             }
         }
-    }
 
-    private void OnMouseUp()
-    {
-        
-    }
-
-    void SpawnRandom()
-    {
-        int rand = UnityEngine.Random.Range(0, 2);
-
-        unityEvents[(EventNames)rand].Invoke(transform.position);
+        if(Input.touchCount == 0 && !canSpawn && touched)
+        {
+            isAttached = false;
+            canSpawn = true;
+            touched = false;
+            collided = false;
+        }
     }
 
     #endregion

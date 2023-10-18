@@ -1,16 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
-public class Cherry : IntEventInvoker
+public class Strawberry : IntEventInvoker
 {
     #region Fields
 
     public bool hasSpawnedStrawberry = false;
 
     bool firstTime = true;
-
     bool nepoBaby = false;
 
     #endregion
@@ -21,7 +19,7 @@ public class Cherry : IntEventInvoker
     {
         unityEvents.Add(EventNames.SpawnStrawberry, new StrawberryEvent());
         EventManager.AddInvoker(EventNames.SpawnStrawberry, this);
-        if(Spawner.isAttached && transform.parent != null)
+        if (Spawner.isAttached && transform.parent != null)
         {
             nepoBaby = true;
             gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
@@ -34,7 +32,7 @@ public class Cherry : IntEventInvoker
 
     private void Update()
     {
-        if(!Spawner.isAttached && transform.parent != null)
+        if (!Spawner.isAttached && transform.parent != null)
         {
             transform.parent = null;
             gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
@@ -44,12 +42,12 @@ public class Cherry : IntEventInvoker
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(firstTime && nepoBaby)
+        if (firstTime && nepoBaby)
         {
             Spawner.collided = true;
             firstTime = false;
         }
-        if(collision.gameObject.tag == "Cherry")
+        /*if (collision.gameObject.tag == "Cherry")
         {
             if (!hasSpawnedStrawberry)
             {
@@ -60,8 +58,8 @@ public class Cherry : IntEventInvoker
             }
             EventManager.RemoveInvoker(EventNames.SpawnStrawberry, this);
             Destroy(gameObject);
-        }
+        }*/
     }
-    
+
     #endregion
 }
