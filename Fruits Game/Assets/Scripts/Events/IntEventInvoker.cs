@@ -7,7 +7,7 @@ public class IntEventInvoker : MonoBehaviour
 {
     #region Fields
     
-    protected Dictionary<EventNames, UnityEvent<Vector2>> unityEvents = new Dictionary<EventNames, UnityEvent<Vector2>>();
+    protected Dictionary<EventNames, UnityEvent<Vector2, int>> unityEvents = new Dictionary<EventNames, UnityEvent<Vector2, int>>();
 
     //protected bool strawberryPerm = true;
 
@@ -15,7 +15,7 @@ public class IntEventInvoker : MonoBehaviour
 
     #region Methods
 
-    public void AddListener(EventNames eventName, UnityAction<Vector2> listener)
+    public void AddListener(EventNames eventName, UnityAction<Vector2, int> listener)
     {
         if(unityEvents.ContainsKey(eventName))
         {

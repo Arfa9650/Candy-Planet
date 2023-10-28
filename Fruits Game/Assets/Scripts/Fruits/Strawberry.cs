@@ -6,10 +6,15 @@ public class Strawberry : IntEventInvoker
 {
     #region Fields
 
-    public bool hasSpawnedStrawberry = false;
+    int points = 2;
+
+    public bool hasSpawned = false;
 
     bool firstTime = true;
+
     bool nepoBaby = false;
+
+    Rigidbody2D rb2d;
 
     #endregion
 
@@ -17,16 +22,21 @@ public class Strawberry : IntEventInvoker
 
     private void Start()
     {
-        unityEvents.Add(EventNames.SpawnStrawberry, new StrawberryEvent());
-        EventManager.AddInvoker(EventNames.SpawnStrawberry, this);
+        unityEvents.Add(EventNames.SpawnRaspberry, new RaspberryEvent());
+        EventManager.AddInvoker(EventNames.SpawnRaspberry, this);
+        rb2d = gameObject.GetComponent<Rigidbody2D>();
         if (Spawner.isAttached && transform.parent != null)
         {
             nepoBaby = true;
-            gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+            rb2d.bodyType = RigidbodyType2D.Kinematic;
         }
         else
         {
-            gameObject.GetComponent<CircleCollider2D>().enabled = true;
+            Collider2D[] coll = gameObject.GetComponents<Collider2D>();
+            foreach (var i in coll)
+            {
+                i.enabled = true;
+            }
         }
     }
 
@@ -35,8 +45,12 @@ public class Strawberry : IntEventInvoker
         if (!Spawner.isAttached && transform.parent != null)
         {
             transform.parent = null;
-            gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
-            gameObject.GetComponent<CircleCollider2D>().enabled = true;
+            rb2d.bodyType = RigidbodyType2D.Dynamic;
+            Collider2D[] coll = gameObject.GetComponents<Collider2D>();
+            foreach (var i in coll)
+            {
+                i.enabled = true;
+            }
         }
     }
 
@@ -47,18 +61,19 @@ public class Strawberry : IntEventInvoker
             Spawner.collided = true;
             firstTime = false;
         }
-        /*if (collision.gameObject.tag == "Cherry")
+        if (collision.gameObject.tag == "Strawberry")
         {
-            if (!hasSpawnedStrawberry)
+            if (!hasSpawned)
             {
                 Vector2 estimate = (transform.position + collision.transform.position) / 2;
-                unityEvents[EventNames.SpawnStrawberry].Invoke(estimate);
-                collision.gameObject.GetComponent<Cherry>().hasSpawnedStrawberry = true;
-                hasSpawnedStrawberry = true;
+                unityEvents[EventNames.SpawnRaspberry].Invoke(estimate, points);
+                collision.gameObject.GetComponent<Strawberry>().hasSpawned = true;
+                hasSpawned = true;
+                Debug.Log("Spawn a rasp");
             }
-            EventManager.RemoveInvoker(EventNames.SpawnStrawberry, this);
+            EventManager.RemoveInvoker(EventNames.SpawnRaspberry, this);
             Destroy(gameObject);
-        }*/
+        }
     }
 
     #endregion

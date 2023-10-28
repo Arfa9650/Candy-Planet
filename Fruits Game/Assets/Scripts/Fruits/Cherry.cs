@@ -7,11 +7,15 @@ public class Cherry : IntEventInvoker
 {
     #region Fields
 
-    public bool hasSpawnedStrawberry = false;
+    int points = 2;
+
+    public bool hasSpawned = false;
 
     bool firstTime = true;
 
     bool nepoBaby = false;
+
+    Rigidbody2D rb2d;
 
     #endregion
 
@@ -21,10 +25,11 @@ public class Cherry : IntEventInvoker
     {
         unityEvents.Add(EventNames.SpawnStrawberry, new StrawberryEvent());
         EventManager.AddInvoker(EventNames.SpawnStrawberry, this);
+        rb2d = gameObject.GetComponent<Rigidbody2D>();
         if(Spawner.isAttached && transform.parent != null)
         {
             nepoBaby = true;
-            gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+            rb2d.bodyType = RigidbodyType2D.Kinematic;
         }
         else
         {
@@ -37,7 +42,7 @@ public class Cherry : IntEventInvoker
         if(!Spawner.isAttached && transform.parent != null)
         {
             transform.parent = null;
-            gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+            rb2d.bodyType = RigidbodyType2D.Dynamic;
             gameObject.GetComponent<CircleCollider2D>().enabled = true;
         }
     }
@@ -51,12 +56,12 @@ public class Cherry : IntEventInvoker
         }
         if(collision.gameObject.tag == "Cherry")
         {
-            if (!hasSpawnedStrawberry)
+            if (!hasSpawned)
             {
                 Vector2 estimate = (transform.position + collision.transform.position) / 2;
-                unityEvents[EventNames.SpawnStrawberry].Invoke(estimate);
-                collision.gameObject.GetComponent<Cherry>().hasSpawnedStrawberry = true;
-                hasSpawnedStrawberry = true;
+                unityEvents[EventNames.SpawnStrawberry].Invoke(estimate, points);
+                collision.gameObject.GetComponent<Cherry>().hasSpawned = true;
+                hasSpawned = true;
             }
             EventManager.RemoveInvoker(EventNames.SpawnStrawberry, this);
             Destroy(gameObject);

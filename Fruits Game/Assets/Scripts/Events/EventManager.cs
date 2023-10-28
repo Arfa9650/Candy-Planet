@@ -9,7 +9,7 @@ public static class EventManager
     #region Fields
 
     static Dictionary<EventNames, List<IntEventInvoker>> invokers = new Dictionary<EventNames, List<IntEventInvoker>>();
-    static Dictionary<EventNames, List<UnityAction<Vector2>>> listeners = new Dictionary<EventNames, List<UnityAction<Vector2>>>();
+    static Dictionary<EventNames, List<UnityAction<Vector2, int>>> listeners = new Dictionary<EventNames, List<UnityAction<Vector2, int>>>();
 
     #endregion
 
@@ -22,7 +22,7 @@ public static class EventManager
             if (!invokers.ContainsKey(name))
             {
                 invokers.Add(name, new List<IntEventInvoker>());
-                listeners.Add(name, new List<UnityAction<Vector2>>());
+                listeners.Add(name, new List<UnityAction<Vector2, int>>());
             }
             else
             {
@@ -34,14 +34,14 @@ public static class EventManager
 
     public static void AddInvoker(EventNames eventNames, IntEventInvoker invoker)
     {
-        foreach (UnityAction<Vector2> listener in listeners[eventNames])
+        foreach (UnityAction<Vector2, int> listener in listeners[eventNames])
         {
             invoker.AddListener(eventNames, listener);
         }
         invokers[eventNames].Add(invoker);
     }
 
-    public static void AddListener(EventNames eventNames, UnityAction<Vector2> listener)
+    public static void AddListener(EventNames eventNames, UnityAction<Vector2, int> listener)
     {
         foreach (IntEventInvoker invoker in invokers[eventNames])
         {

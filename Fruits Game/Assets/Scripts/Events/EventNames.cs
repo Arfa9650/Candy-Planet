@@ -6,5 +6,14 @@ public enum EventNames
 {
     SpawnCherry,
     SpawnStrawberry,
+    SpawnRaspberry,
+    SpawnLemon,
+    SpawnKiwi,
+    SpawnOrange,
+    SpawnApple,
+    SpawnPear,
+    SpawnCantaloupe,
+    SpawnPineapple,
+    SpawnWatermelon,
     SpawnRandom
 }
