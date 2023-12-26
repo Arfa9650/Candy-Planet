@@ -6,9 +6,11 @@ public class Raspberry : IntEventInvoker
 {
     #region Fields
 
-    int points = 2;
+    int points = 6;
 
     public bool hasSpawned = false;
+
+    public bool available = true;
 
     bool firstTime = true;
 
@@ -25,7 +27,7 @@ public class Raspberry : IntEventInvoker
         unityEvents.Add(EventNames.SpawnLemon, new LemonEvent());
         EventManager.AddInvoker(EventNames.SpawnLemon, this);
         rb2d = gameObject.GetComponent<Rigidbody2D>();
-        if (Spawner.isAttached && transform.parent != null)
+        if (/*Spawner.isAttached &&*/ transform.parent != null)
         {
             nepoBaby = true;
             rb2d.bodyType = RigidbodyType2D.Kinematic;
@@ -58,22 +60,40 @@ public class Raspberry : IntEventInvoker
     {
         if (firstTime && nepoBaby)
         {
+            //Debug.Log("I did my part");
             Spawner.collided = true;
             firstTime = false;
         }
         if (collision.gameObject.tag == "Raspberry")
         {
-            if (!hasSpawned)
+            if (!hasSpawned && collision.gameObject.GetComponent<Raspberry>().available)
             {
                 Vector2 estimate = (transform.position + collision.transform.position) / 2;
                 unityEvents[EventNames.SpawnLemon].Invoke(estimate, points);
                 collision.gameObject.GetComponent<Raspberry>().hasSpawned = true;
+                collision.gameObject.GetComponent<Raspberry>().available = false;
+                available = false;
                 hasSpawned = true;
             }
-            EventManager.RemoveInvoker(EventNames.SpawnLemon, this);
-            Destroy(gameObject);
+            if (!available)
+            {
+                Collider2D[] coll = gameObject.GetComponents<Collider2D>();
+                foreach (var i in coll)
+                {
+                    i.enabled = false;
+                }
+
+                GetComponent<Animator>().SetTrigger("Exit");
+
+                EventManager.RemoveInvoker(EventNames.SpawnLemon, this);
+                Invoke("KillTarget", 0.1f);
+            }
         }
     }
 
+    void KillTarget()
+    {
+        Destroy(gameObject);
+    }
     #endregion
 }

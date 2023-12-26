@@ -8,12 +8,13 @@ public enum EventNames
     SpawnStrawberry,
     SpawnRaspberry,
     SpawnLemon,
-    SpawnKiwi,
     SpawnOrange,
     SpawnApple,
     SpawnPear,
     SpawnCantaloupe,
     SpawnPineapple,
+    SpawnCoconut,
     SpawnWatermelon,
-    SpawnRandom
+    SpawnRandom,
+    GameOver
 }

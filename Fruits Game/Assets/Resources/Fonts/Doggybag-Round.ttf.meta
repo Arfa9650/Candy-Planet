@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: f503a03c45ad1274eb3b8e6ace8a8e33
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Doggybag
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 84c1a5932f8d3e94db9a73f8dc9add0a, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

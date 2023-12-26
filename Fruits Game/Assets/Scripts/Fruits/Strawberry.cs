@@ -6,9 +6,10 @@ public class Strawberry : IntEventInvoker
 {
     #region Fields
 
-    int points = 2;
+    int points = 3;
 
     public bool hasSpawned = false;
+    public bool available = true;
 
     bool firstTime = true;
 
@@ -25,7 +26,7 @@ public class Strawberry : IntEventInvoker
         unityEvents.Add(EventNames.SpawnRaspberry, new RaspberryEvent());
         EventManager.AddInvoker(EventNames.SpawnRaspberry, this);
         rb2d = gameObject.GetComponent<Rigidbody2D>();
-        if (Spawner.isAttached && transform.parent != null)
+        if (/*Spawner.isAttached &&*/ transform.parent != null)
         {
             nepoBaby = true;
             rb2d.bodyType = RigidbodyType2D.Kinematic;
@@ -58,22 +59,40 @@ public class Strawberry : IntEventInvoker
     {
         if (firstTime && nepoBaby)
         {
+            //Debug.Log("I did my part");
             Spawner.collided = true;
             firstTime = false;
         }
         if (collision.gameObject.tag == "Strawberry")
         {
-            if (!hasSpawned)
+            if (!hasSpawned && collision.gameObject.GetComponent<Strawberry>().available)
             {
                 Vector2 estimate = (transform.position + collision.transform.position) / 2;
                 unityEvents[EventNames.SpawnRaspberry].Invoke(estimate, points);
                 collision.gameObject.GetComponent<Strawberry>().hasSpawned = true;
+                collision.gameObject.GetComponent<Strawberry>().available = false;
+                available = false;
                 hasSpawned = true;
-                Debug.Log("Spawn a rasp");
             }
-            EventManager.RemoveInvoker(EventNames.SpawnRaspberry, this);
-            Destroy(gameObject);
+            if (!available)
+            {
+                Collider2D[] coll = gameObject.GetComponents<Collider2D>();
+                foreach (var i in coll)
+                {
+                    i.enabled = false;
+                }
+
+                GetComponent<Animator>().SetTrigger("Exit");
+
+                EventManager.RemoveInvoker(EventNames.SpawnRaspberry, this);
+                Invoke("KillTarget", 0.1f);
+            }
         }
+    }
+
+    void KillTarget()
+    {
+        Destroy(gameObject);
     }
 
     #endregion

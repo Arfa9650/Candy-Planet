@@ -7,11 +7,19 @@ TagManager:
   - Cherry
   - Strawberry
   - Raspberry
+  - Lemon
+  - Orange
+  - Apple
+  - Pear
+  - Cantaloupe
+  - Pineapple
+  - Coconut
+  - Watermelon
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Candy
   - Water
   - UI
   - 

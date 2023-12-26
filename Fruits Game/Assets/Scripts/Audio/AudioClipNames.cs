@@ -4,13 +4,7 @@ using UnityEngine;
 
 public enum AudioClipNames
 {
-    BallLoss,
-    Standard,
-    Bonus,
-    SpeedUp,
-    Freeze,
-    TimeBomb,
-    MenuButton,
-    PauseGame,
-    Spawn
+    Merge,
+    Drop,
+    Button
 }
